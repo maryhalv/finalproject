@@ -9,6 +9,10 @@ body {
 div{
     text-align: center;
 }
+
+.deleting:hover {
+    color: red;
+}
 h1{
     text-align: center;
 }
@@ -16,8 +20,39 @@ button{
    font-family: 'Poppins', sans-serif;
       font-size: 20px;
       padding: 10px 20px;
+      border-radius: 12px;
+}
+.create_t {
+    margin-bottom: 20px;
+}
+.get_seat{
+     margin-bottom: 20px; 
+     margin-top: 20px; 
 }
 table{
+ margin-left: auto;
+    margin-right: auto;
+    /*background: transparent;*/
+}
+.seat_table, .flight_table {
+    background: white;
+    border-radius: 12px;
+}
+.ticket_display, th, td{
     margin-left: auto;
     margin-right: auto;
+    border: 1px solid black;
+    background: white;
+}
+p{
+    text-align: center;
+}
+.dashboard, th, td {
+    background: transparent;
+    border: transparent;
+    margin-left: auto;
+    margin-right: auto;
+}
+form{
+    font-family: 'Poppins', sans-serif;
 }
