@@ -52,66 +52,13 @@ function createDashboard() {
    $('body').append("<h1>" + name.substring(0, name.length-7) + " Flight Editor</h1>");
     $('body').append("<div><button onclick='createSelect();'>Change Airline</button><div>");
        $('body').append("<div><table class = 'dashboard'></table><div>");
-    $('.dashboard').append('<tr><td><button onclick = "flightInfoPage('+ airlineId + ');">Flights</button></td></tr>');
-   $('.dashboard').append('<tr><td><button onclick = "getFlights(' + airlineId + ');">Seats</button></td></tr>');
-    $('.dashboard').append('<tr><td><button onclick = "getFlights_for_Tickets();">Tickets</button></td></tr>');
-    $('.dashboard').append('<tr><td><button onclick = "getAirports();">Airports</button></td></tr>');
+    $('.dashboard').append('<tr><td><button class="dash" onclick = "flightInfoPage('+ airlineId + ');">Flights</button></td></tr>');
+   $('.dashboard').append('<tr><td><button class="dash" onclick = "getFlights(' + airlineId + ');">Seats</button></td></tr>');
+    $('.dashboard').append('<tr><td><button class="dash" onclick = "getFlights_for_Tickets();">Tickets</button></td></tr>');
+    $('.dashboard').append('<tr><td><button class="dash" onclick = "getAirports();">Airports</button></td></tr>');
     //$('.dashboard').append('<tr><td><button onclick = "fun_Map();">Interactive Map</button></td></tr>');
     
 }
-
-/*function fun_Map() {
-    $('body').empty();
-    $('body').append('<h1>Interactive Airport Map</h1>')
-     $('body').append('<span class="mappie"><div class = "airport_drop"><form><select id ="airports"></select></form></div><span>');
-     $('.mappie').append('<div id = "map"></div>');
-    $.ajax({
-            url: 'http://comp426.cs.unc.edu:3001/airports',
-  type: 'GET',
-  dataType: 'json',
-  xhrFields: { withCredentials: true },
-   success: (response) => {
-    //console.log('reached');
-    let airports = response;
-                for(let i = 0; i < airports.length; i++ ) {
-                    $('#airports').append("<option>" + airports[i].name + "</option>");
-                    console.log(airports[i].id);
-                    airport_ids[i] = airports[i].id;
-                    var city = airports[i].city;
-                    $.ajax({
-            url: 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&APPID=b92f9f9fd01f6586a4ff4febd273ea26&units=imperial',
-  type: 'GET',
-  dataType: 'json',
-   success: (response) => {
-let weather = response;
-
-var lat = weather.coord.lat;
-var lon = weather.coord.lon;
-
-                    $('#airports').hover(function () {
-                        buildMap(lat, lon);
-                        });
-               }
-            });
-                }
-
-               }
-            
-            });
-    
-}*/
-
-/*var map_interactive;
-    function buildMap(latitude, longitude) {
-        var lat_ = latitude;
-        var long_ = longitude;
-    var location= {lat: lat_, lng: long_};
-    map_interactive = new google.maps.Map( document.getElementById('map_2'), {zoom: 4, center: location});
- 
-             var marker = new google.maps.Marker({position: location, map: map_interactive});
-        
-     //var marker = new google.maps.Marker({position: location, map: map});
-        }*/
 
 function getAirportInfo() {
     let airport_name = document.getElementById('airports').value;
@@ -126,7 +73,7 @@ function getAirportInfo() {
    success: (response) => {
     let airport = response;
    
-    $('.weather').append('<p> Weather in ' + airport[0].city + ':</p>');
+   // $('.weather').append('<p> Weather in ' + airport[0].city + ':</p>');
      $('.weather').append('<div class = "map_display"><table class = "weather_table"></table><div>');
      $('.weather_table').empty();
     city = airport[0].city;
@@ -139,10 +86,10 @@ $.ajax({
 let weather = response;
 
 $('.weather_table').append('<tr><td>City</td><td>' + city + '</td></tr>');
-   $('.weather_table').append('<tr><td>Temperature</td><td>' + weather.main.temp + '</td></tr>');
-    $('.weather_table').append('<tr><td>Temperature</td><td>' + weather.wind.speed + ' mph</td></tr>');
+   $('.weather_table').append('<tr><td>Temperature</td><td>' + weather.main.temp + ' F</td></tr>');
+    $('.weather_table').append('<tr><td>Wind Speed</td><td>' + weather.wind.speed + ' mph</td></tr>');
     //$('.weather_table').append('<tr><td>Description</td>' + weather.main.description + '<td></td></tr>');
-    $('.weather_table').append('<tr><td class ="coords" >Long: </td><td class = "coords">Long: ' +  weather.coord.lon + '  Lat: ' + weather.coord.lat + '</td><tr>');
+    $('.weather_table').append('<tr><td class ="coords" >Coordinate </td><td class = "coords">Long: ' +  weather.coord.lon + '  Lat: ' + weather.coord.lat + '</td><tr>');
     $('.map_display').append('<div id = "map"></div>');
     
     createMap(weather.coord.lat, weather.coord.lon);
@@ -172,7 +119,7 @@ function getAirports() {
     $('body').append('<div><button onclick = "createAirportPage();">Create an Airport</button><div>');
     $('body').append('<div><p>Select an Airport to view the local weather conditions at that location.<p></div>');
       $('body').append('<div class = "airport_drop"><form><select id ="airports"></select></form></div>');
-        $('.airport_drop').append('<button onclick = "getAirportInfo();">Select Airport</button>');
+        $('.airport_drop').append('<button class="airport_info" onclick = "getAirportInfo();">Select Airport</button>');
         $('body').append('<div class = "weather"></div>');
     
     $.ajax({
@@ -297,9 +244,8 @@ function createTickets() {
     $('.input').append("<p>Seat <form><input type = 'text' id ='seat'></input></form></p>");
     
     $('.input').append("<button onclick = 'createTicket();'>Create Ticket</button>");
-    
-
 }
+
 function createTicket(){
     console.log('reached');
     
@@ -365,7 +311,7 @@ airlineId = identification;
          
 
               $.ajax({
-            url: 'http://comp426.cs.unc.edu:3001/flights',
+            url: 'http://comp426.cs.unc.edu:3001/flights?filter[id]=' + airlineId,
   type: 'GET',
   dataType: 'json',
   xhrFields: { withCredentials: true },
@@ -380,10 +326,6 @@ airlineId = identification;
                }
             
             });
-        
-        //functionality to add flights
-        //delete fights
-        //
 }
 
 function createFlight() {
@@ -406,9 +348,8 @@ function createFlight() {
 function newFlight() {
      console.log('reached');
      let time = document.getElementById('departure').value.toString();
-     //time.setHours((document.getElementById('departure').value).substring(0,2), (document.getElementById('departure').value).substring(3));
      let time_2 = document.getElementById('arrival').toString();
-     //time_2.setHours((document.getElementById('arrival').value).substring(0,2), (document.getElementById('arrival').value).substring(3));
+
      
     $.ajax({
             url: 'http://comp426.cs.unc.edu:3001/flights',
@@ -437,7 +378,7 @@ function getFlightInfo(){
     $('.flight_info').empty();
 
     $.ajax({
-            url: 'http://comp426.cs.unc.edu:3001/flights',
+            url: 'http://comp426.cs.unc.edu:3001/flights?filter[number]=' + flight_number,
   type: 'GET',
   dataType: 'json',
   xhrFields: { withCredentials: true },
@@ -495,8 +436,6 @@ function getFlightInfo(){
             }
         }
          $('.change_times').append("<button onclick = 'changeArrival(" + flights[i].id + ");'>Change</button>");
-        
-        
                     }
                }
                }
@@ -508,8 +447,6 @@ function changeDepart(information) {
     console.log(depart + "DEPART TIME");
    // let time = new Date(depart);
     console.log((document.getElementById('departure').value).substring(0,2));
-    //why is this adding the hours instead of changing them??
-   // time.setHours((document.getElementById('departure').value).substring(0,2), (document.getElementById('departure').value).substring(3));
    let time = document.getElementById('departure').value.toString();
     console.log(time);
 
@@ -529,7 +466,6 @@ function changeDepart(information) {
                $('.change_times').empty();
                  $('.flight_table').empty();
                getFlightInfo();
-               // $('.change_times').append('<p>Departure time has successfully been changed.</p>');
             }
 });
 }
@@ -573,7 +509,6 @@ airlineId = identification;
          $('.first').append("<form><select id='current_flight' class = 'flights'></select></form>");
            $('body').append("<div class = 'editor'><button onclick='getSeatMap();'>View Seat Map</button></div>");
          
-
               $.ajax({
             url: 'http://comp426.cs.unc.edu:3001/flights?filter[airline_id]=' + airlineId,
   type: 'GET',
@@ -589,10 +524,6 @@ airlineId = identification;
                }
             
             });
-        
-        //functionality to add flights
-        //delete fights
-        //
 }
 
 function getSeatMap() {
@@ -603,9 +534,8 @@ function getSeatMap() {
     thisplane = thisplane.substring(thisplane.length - 5);
    console.log(thisplane);
     
-    
-        $.ajax({
-            url: 'http://comp426.cs.unc.edu:3001/planes',
+$.ajax({
+  url: 'http://comp426.cs.unc.edu:3001/planes',
   type: 'GET',
   dataType: 'json',
   xhrFields: { withCredentials: true },
@@ -620,9 +550,9 @@ function getSeatMap() {
                         $('body').append("<div class ='seat_display'><img src = '" + seatmap + "' alt= 'SeatMap'><img></div>");
                     }
                }
-               }
+            }
             
-            });
+        });
     
 }
 
@@ -633,20 +563,20 @@ function seatEditor(plane_num) {
     $('.first').empty();
    $('.editor').empty();
         $.ajax({
-            url: 'http://comp426.cs.unc.edu:3001/seats',
-  type: 'GET',
-  dataType: 'json',
-  xhrFields: { withCredentials: true },
-  data: {
-    "seat": {
-    "plane_id" : plane
-    }
-  },
+        url: 'http://comp426.cs.unc.edu:3001/seats',
+        type: 'GET',
+        dataType: 'json',
+        xhrFields: { withCredentials: true },
+        data: {
+            "seat": {
+            "plane_id" : plane
+                    }
+            },
    success: (response) => {
-  $('.editor').append("<p>Select a Seat to view its information</p>");
+    $('.editor').append("<p>Select a Seat to view its information</p>");
     $('.editor').append("<form><select id='view_seats'></select></form>");
-     $('.editor').append("<button class='get_seat' onclick = 'getSeatInfo(" + plane + ");'>Get Info</button>");
-     $('.editor').append("<div class='seat_info'></div>");
+    $('.editor').append("<button class='get_seat' onclick = 'getSeatInfo(" + plane + ");'>Get Info</button>");
+    $('.editor').append("<div class='seat_info'></div>");
                let seats = response;
                 for(var i = 0; i < seats.length; i++) {
                    if(JSON.stringify(seats[i].plane_id) === JSON.stringify(plane)) {
@@ -654,9 +584,7 @@ function seatEditor(plane_num) {
                    }
                     }
                }
-            
             });
-    
 }
 
 function getSeatInfo(current_plane){
@@ -684,7 +612,6 @@ function getSeatInfo(current_plane){
   xhrFields: { withCredentials: true },
    success: (response) => {
  
-  
                let seats = response;
                console.log(seats);
                 for(var i = 0; i < seats.length; i++) {
@@ -696,7 +623,6 @@ function getSeatInfo(current_plane){
                     var id = seats[i].id;
                     if(seats[i].is_window === false) {
                         window = "no";
-                        
                     } else {
                         window = 'yes';
                     }
