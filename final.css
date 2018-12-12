@@ -23,6 +23,9 @@ button{
       border-radius: 12px;
       border: transparent;
 }
+.airport_info {
+    margin-bottom: 20px;
+}
 .create_t {
     margin-bottom: 20px;
 }
